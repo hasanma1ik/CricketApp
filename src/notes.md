@@ -387,3 +387,401 @@ const handleShowFinalSquad = () =>{
 
 ```
 
+
+``` js
+const handleCricketerClick = (cricketer) =>{
+  if (final11.some((selected) => selected.id === cricketer.id)){
+
+    setPromptMessage(`${cricketer.name} is already in the squad`)
+
+    setTimeout(() => {
+      setPromptMessage(null)
+      
+    }, 3000);
+  } else { 
+  setfinal11([...final11, final11])
+  }
+}
+const handleRemoveCricketer = (id) =>{
+  setFinal11(final11.filter((cricketer)=> cricketer.id !== id))
+}
+const handleClosePrompt = () =>{
+  setPromptMessage(null)
+}
+
+const onDragEnd = (result) =>{
+  if(!result.destination) return  // Dragged outside the list
+
+  // Reorder the selectedCricketers array based on the drag-and-drop result
+const items = Array.from(final11)
+const[reorderedItem] = items.splice(result.source.index, 1)
+items.splice(result.destination.index, 0, reorderedItem)
+
+setFinal11(items)
+  // Update the selectedCricketers array with the reordered items.
+}
+
+
+
+  <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="final11">
+        {(provided)=>(
+          <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          {...provided.dragHandleProps}
+          >
+    <Final11 
+    final11={final11}
+    onRemoveCricketer={handleRemoveCricketer}
+    onDragEnd={onDragEnd}
+    />
+          </div>
+        )}
+
+      </Droppable>
+    </DragDropContext>
+
+
+ const onDragEnd = (result) =>{
+  if(!result.destination) return  // Dragged outside the list
+
+  // Reorder the selectedCricketers array based on the drag-and-drop result
+const items = Array.from(final11)
+const[reorderedItem] = items.splice(result.source.index, 1)
+items.splice(result.destination.index, 0, reorderedItem)
+
+setFinal11(items)
+  // Update the selectedCricketers array with the reordered items.
+
+}
+
+```
+
+
+
+``` js
+// latest code
+
+import React, {useState} from "react";
+import CricketerList from "./cricketerlist";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import SelectedCricketer from "./selectedcricketer";
+import cricketerData from "./data";
+import CricketerCard from "./cricketercard";
+import Final11 from './final11'; // Import the Final11 component
+import FinalSquad from "./finalsquad";
+
+function App() {
+const [selectedCricketers, setSelectedCricketers] = useState([])
+const [promptMessage, setPromptMessage] = useState(null)
+const [showFinalSquad, setShowFinalSquad] = useState(false)
+const [final11, setFinal11] = useState([]);
+
+const handleCricketerClick = (cricketer) =>{
+  if (selectedCricketers.some((selected) => selected.id === cricketer.id)){
+
+    setPromptMessage(`${cricketer.name} is already in the squad`)
+
+    setTimeout(() => {
+      setPromptMessage(null)
+      
+    }, 3000);
+  } else { 
+  setSelectedCricketers([...selectedCricketers, cricketer])
+  }
+}
+const handleRemoveCricketer = (id) =>{
+  setSelectedCricketers(selectedCricketers.filter((cricketer)=> cricketer.id !== id))
+  setFinal11(final11.filter((cricketer)=> cricketer.id !== id))
+}
+const handleClosePrompt = () =>{
+  setPromptMessage(null)
+}
+
+const onDragEnd = (result, sourceList, setSourceList) => {
+  if (!result.destination) return; // Dragged outside the list
+
+  // Reorder the sourceList array based on the drag-and-drop result
+  const items = Array.from(sourceList);
+  const [reorderedItem] = items.splice(result.source.index, 1);
+  items.splice(result.destination.index, 0, reorderedItem);
+
+  setSourceList(items);
+  // Update the sourceList array with the reordered items.
+};
+
+
+const handleShowFinalSquad = () =>{
+  // Check if at least 15 players are selected before showing the final squad
+  if (selectedCricketers.length >= 15){
+    setShowFinalSquad(true)
+  } else {
+    setPromptMessage('Please select atleast 15 players to finalize squad!')
+  }
+}
+const handleFinal11CricketerClick = (cricketer) => {
+  if (final11.some((selected) => selected.id === cricketer.id)) {
+    setPromptMessage(`${cricketer.name} is already in the Final XI`);
+
+    setTimeout(() => {
+      setPromptMessage(null);
+    }, 3000);
+  } else {
+    setFinal11([...final11, cricketer]);
+  }
+  
+};
+
+return (
+  <div className="app">
+    <CricketerList
+      cricketers={cricketerData}
+      onCricketerClick={handleCricketerClick}
+    />
+  
+    
+    
+    <DragDropContext onDragEnd={(result) => onDragEnd(result, selectedCricketers, setSelectedCricketers)}>
+  <Droppable droppableId="selectedCricketers">
+    {(provided) => (
+      <div
+        ref={provided.innerRef}
+        {...provided.droppableProps}
+        {...provided.dragHandleProps}
+      >
+        <SelectedCricketer
+          selectedCricketers={selectedCricketers}
+          onRemoveCricketer={handleRemoveCricketer}
+          onDragEnd={(result) => onDragEnd(result, selectedCricketers, setSelectedCricketers)}
+        />
+      </div>
+    )}
+  </Droppable>
+</DragDropContext>;
+
+
+<DragDropContext onDragEnd={(result) => onDragEnd(result, final11, setFinal11)}>
+  <Droppable droppableId="final11">
+    {(provided) => (
+      <div
+        ref={provided.innerRef}
+        {...provided.droppableProps}
+        {...provided.dragHandleProps}
+      >
+        <Final11
+          final11={final11}
+          onRemoveCricketer={handleRemoveCricketer}
+          onDragEnd={(result) => onDragEnd(result, final11, setFinal11)}
+        />
+      </div>
+    )}
+  </Droppable>
+</DragDropContext>;
+   
+    {promptMessage && (
+      <div className="prompt">
+        <div className="prompt-message">
+          {promptMessage}
+          <button className="close-button" onClick={handleClosePrompt}>
+            X
+          </button>
+        </div>
+      </div>
+    )}
+{showFinalSquad && (
+        <FinalSquad
+          cricketers={selectedCricketers}
+          onCricketerClick={handleFinal11CricketerClick}
+        />
+      )}
+
+      <button className="final-squad-button" onClick={handleShowFinalSquad}>
+        Display Final Squad
+      </button>
+    </div>
+  );
+}
+ 
+export default App;
+
+```
+
+
+```js
+//precode
+
+import React, {useState} from "react";
+import CricketerList from "./cricketerlist";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import SelectedCricketer from "./selectedcricketer";
+import cricketerData from "./data";
+import CricketerCard from "./cricketercard";
+import FinalSquad from "./finalsquad";
+
+function App() {
+const [selectedCricketers, setSelectedCricketers] = useState([])
+const [promptMessage, setPromptMessage] = useState(null)
+const [showFinalSquad, setShowFinalSquad] = useState(false)
+
+const handleCricketerClick = (cricketer) =>{
+  if (selectedCricketers.some((selected) => selected.id === cricketer.id)){
+
+    setPromptMessage(`${cricketer.name} is already in the squad`)
+
+    setTimeout(() => {
+      setPromptMessage(null)
+      
+    }, 3000);
+  } else { 
+  setSelectedCricketers([...selectedCricketers, cricketer])
+  }
+}
+const handleRemoveCricketer = (id) =>{
+  setSelectedCricketers(selectedCricketers.filter((cricketer)=> cricketer.id !== id))
+}
+const handleClosePrompt = () =>{
+  setPromptMessage(null)
+}
+
+const onDragEnd = (result) =>{
+  if(!result.destination) return  // Dragged outside the list
+
+  // Reorder the selectedCricketers array based on the drag-and-drop result
+const items = Array.from(selectedCricketers)
+const[reorderedItem] = items.splice(result.source.index, 1)
+items.splice(result.destination.index, 0, reorderedItem)
+
+setSelectedCricketers(items)
+  // Update the selectedCricketers array with the reordered items.
+}
+
+const handleShowFinalSquad = () =>{
+  // Check if at least 15 players are selected before showing the final squad
+  if (selectedCricketers.length >= 15){
+    setShowFinalSquad(true)
+  } else {
+    setPromptMessage('Please select atleast 15 players to finalize squad!')
+  }
+}
+
+return (
+  <div className="app">
+    <CricketerList
+      cricketers={cricketerData}
+      onCricketerClick={handleCricketerClick}
+    />
+    
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="selectedCricketers">
+        {(provided)=>(
+          <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          {...provided.dragHandleProps}
+          >
+    <SelectedCricketer 
+    selectedCricketers={selectedCricketers}
+    onRemoveCricketer={handleRemoveCricketer}
+    onDragEnd={onDragEnd}
+    />
+          </div>
+        )}
+
+      </Droppable>
+    </DragDropContext>
+   
+    {promptMessage && (
+      <div className="prompt">
+        <div className="prompt-message">
+          {promptMessage}
+          <button className="close-button" onClick={handleClosePrompt}>
+            X
+          </button>
+        </div>
+      </div>
+    )}
+        {showFinalSquad && (
+          <div className="final-squad-dropdown">
+            <h2 className='heading2'>Final Squad</h2>
+            {selectedCricketers.map((cricketer, index) => (
+        <div key={cricketer.id} className="cricketer-entry">
+          <div className="italic-number1">
+                    <p>{index + 1}</p>
+                      </div>
+                <CricketerCard cricketer={cricketer} onCricketerClick={() => {}} />
+              </div>
+              
+            ))}
+          </div>
+        )}
+           <button className="final-squad-button" onClick={handleShowFinalSquad}>
+           Display Final Squad
+         </button>
+  
+
+  </div>
+);
+}
+ 
+export default App;
+
+```
+
+
+
+
+```js
+import React from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'; 
+import CricketerCard from './cricketercard';
+
+function FinalSquad ({ finalsquad, onRemoveCricketer, onDragEnd}) {
+    return(
+        <div className="final-squad-dropdown">
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId='finalsquad'>
+                {(provided)=>(
+                    <div className='finalsquad' ref={provided.innerRef} {...provided.droppableProps}> 
+                    <h2 className='heading2'>My Final Squad</h2>
+                    {finalsquad && finalsquad.map((cricketer, index)=>(
+                          <Draggable
+                          key={cricketer.id}
+                          draggableId={cricketer.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              className="cricketer-entry"
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <div className="italic-number">
+                              <p>{index + 1}</p>
+                                </div>
+                              <button
+                                className='delete-button'
+                                onClick={() => onRemoveCricketer(cricketer.id)}
+                              >
+                                X
+                              </button>
+                              <CricketerCard cricketer={cricketer} onCricketerClick={() => {}} />
+                            </div>
+                          )}
+                        </Draggable>
+                    ))}
+                     {provided.placeholder}
+                    </div>
+                )}
+                </Droppable>
+
+            </DragDropContext>
+        </div>
+    )
+}
+export default FinalSquad
+
+
+
+```
