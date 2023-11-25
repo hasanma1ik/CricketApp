@@ -1,14 +1,18 @@
-// FinalSquad.js
-import React from 'react';
+// FinalSquad.j
+import React, {useState} from "react";
 import CricketerCard from './cricketercard';
+import './shareImages.css';
 
 function FinalSquad({ cricketers, onCricketerClick }) {
   const filteredCricketers = cricketers.filter((cricketer)=>
   cricketer.name.toLowerCase())
+
+
   
   return (
-    <div className="final-squad-dropdown">
-      <h2 className="heading2">My Final Squad</h2>
+    <div id="finalSquadDropdown" className="final-squad-dropdown">
+     
+     <h2 className="heading2">My Final Squad</h2>
      
   
   <div className='final-squad-container'>

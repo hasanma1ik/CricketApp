@@ -6,6 +6,9 @@ import cricketerData from "./data";
 import CricketerCard from "./cricketercard";
 import Final11 from './final11';
 import FinalSquad from "./finalsquad";
+import ShareButton from './sharebutton';
+import './shareImages.css';
+
 
 function App() {
 const [selectedCricketers, setSelectedCricketers] = useState([])
@@ -26,10 +29,14 @@ const handleCricketerClick = (cricketer) =>{
   setSelectedCricketers([...selectedCricketers, cricketer])
   }
 }
-const handleRemoveCricketer = (id) =>{
-  setSelectedCricketers(selectedCricketers.filter((cricketer)=> cricketer.id !== id))
+const handleRemoveCricketer = (id, fromList) =>{
+  if(fromList === 'playing11'){
   setFinal11(final11.filter((cricketer)=> cricketer.id !== id))
+  } else {
+    setSelectedCricketers(selectedCricketers.filter((cricketer)=> cricketer.id !== id))
+  }
 }
+
 const handleClosePrompt = () =>{
   setPromptMessage(null)
 }
@@ -70,15 +77,32 @@ const handleFinal11CricketerClick = (cricketer) => {
   }
 }
 
-
 return (
+  
+  <div>
+      {/* Fancy Navbar */}
+   <nav className="navbar">
+  <div className="navbar-logo">CricSquad</div>
+  <div className="navbar-links">
+    <a href="#">Home</a>
+    <a href="#">Tests</a>
+    <a href="#">ODIs</a>
+    <a href="#">T20s</a>
+  </div>
+
+   </nav>
+
+
+      {/* Main Content */}
   <div className="app">
     <CricketerList
       cricketers={cricketerData}
       onCricketerClick={handleCricketerClick}
     />
     
-    <DragDropContext onDragEnd={(result) => onDragEnd(result, selectedCricketers, setSelectedCricketers)}>
+
+        {/* Selected Cricketers */}
+    <DragDropContext onDragEnd={(result) => onDragEnd(result, selectedCricketers, setSelectedCricketers )}>
       <Droppable droppableId="selectedCricketers">
         {(provided)=>(
           <div
@@ -97,6 +121,7 @@ return (
       </Droppable>
     </DragDropContext>
 
+ {/* Final 11 */}
     <DragDropContext onDragEnd={(result)=> onDragEnd(result, final11, setFinal11)}>
       <Droppable droppableId="final11">
         {(provided)=>(
@@ -107,9 +132,10 @@ return (
         >
           <Final11
             final11={final11}
-            onRemoveCricketer={handleRemoveCricketer}
+            onRemoveCricketer={(id) => handleRemoveCricketer(id, 'playing11')}
             onDragEnd={(result) => onDragEnd(result, final11, setFinal11)}
           />
+          <ShareButton containerId="final11Dropdown" />
         </div>
         )}
 
@@ -129,15 +155,24 @@ return (
       </div>
     )}
 
-       {showFinalSquad && (
+  {/* Final Squad */}
+  {showFinalSquad && (
+    
+  <>
         <FinalSquad
         cricketers={selectedCricketers}
         onCricketerClick={handleFinal11CricketerClick}
         />
+        <ShareButton containerId="finalSquadDropdown" cricketers={selectedCricketers} />
+        </>
+        
        )}
+
+        {/* Display Final Squad Button */}
        <button className="final-squad-button" onClick={handleShowFinalSquad}>
         Display Final Squad
       </button>
+    </div>
     </div>
   );
 }

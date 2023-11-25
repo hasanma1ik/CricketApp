@@ -1,10 +1,12 @@
 import React from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'; 
 import CricketerCard from './cricketercard';
+import './shareImages.css';
+
 
 function Final11 ({ final11, onRemoveCricketer, onDragEnd}) {
     return(
-        <div className='final11-dropdown'>
+        <div id="final11Dropdown" className='final11-dropdown'>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId='final11'>
                 {(provided)=>(

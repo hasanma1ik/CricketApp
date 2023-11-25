@@ -259,6 +259,42 @@ body {
   color: black;
   
 }
+/* Navbar Styles */
+.navbar {
+  background-color: black;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+
+}
+
+.navbar-logo {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: 'Copperplate', 'Papyrus', 'fantasy';
+}
+
+.navbar-links {
+  display: flex;
+  font-family: 'Copperplate', 'Papyrus', 'fantasy';
+}
+
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  margin-right: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Hover effect for links */
+.navbar-links a:hover {
+  color: lightgray;
+}
+
 
 
 
