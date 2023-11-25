@@ -4,8 +4,10 @@ import styled from 'styled-components';
 
 // Styled component for the image container
 const StyledImageContainer = styled.div`
-  font-family: 'Your-Desired-Font', sans-serif;
+   font-family: 'Permanent Marker', 'cursive';
   font-size: 16px;
+  margin-left: -180px;
+
   /* Add other styles as needed */
 `;
 

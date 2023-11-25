@@ -135,7 +135,7 @@ return (
             onRemoveCricketer={(id) => handleRemoveCricketer(id, 'playing11')}
             onDragEnd={(result) => onDragEnd(result, final11, setFinal11)}
           />
-          <ShareButton containerId="final11Dropdown" />
+          <ShareButton containerId="final11Dropdown" cricketers={final11} />
         </div>
         )}
 
