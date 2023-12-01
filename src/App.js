@@ -135,7 +135,7 @@ return (
             onRemoveCricketer={(id) => handleRemoveCricketer(id, 'playing11')}
             onDragEnd={(result) => onDragEnd(result, final11, setFinal11)}
           />
-          <ShareButton containerId="final11Dropdown" cricketers={final11} />
+          <ShareButton containerId="final11Dropdown" cricketers={final11} type="final11" />
         </div>
         )}
 
@@ -163,7 +163,7 @@ return (
         cricketers={selectedCricketers}
         onCricketerClick={handleFinal11CricketerClick}
         />
-        <ShareButton containerId="finalSquadDropdown" cricketers={selectedCricketers} />
+      <ShareButton containerId="finalSquadDropdown" cricketers={selectedCricketers} type="finalSquad" />
         </>
         
        )}
@@ -172,6 +172,8 @@ return (
        <button className="final-squad-button" onClick={handleShowFinalSquad}>
         Display Final Squad
       </button>
+
+     
     </div>
     </div>
   );
